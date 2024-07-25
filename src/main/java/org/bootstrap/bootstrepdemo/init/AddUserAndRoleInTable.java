@@ -26,7 +26,7 @@ public class AddUserAndRoleInTable {
     private void init() {
         roleRepos.save(new Role(1L, "ROLE_ADMIN"));
         roleRepos.save(new Role(2L, "ROLE_USER"));
-        userService.save(new User("Anar", "banan_asl@icloud.com", "12345678",roleRepos.findAll()));
-        userService.save(new User("Andrey", "Andrey@icloud.com", "1234", roleRepos.findById(2L).stream().toList()));
+        userService.save(new User("Anar", "Aslanov", "banan_asl@icloud.com", "12345678",22, roleRepos.findAll()));
+        userService.save(new User("Andrey", "Sidorov", "Andrey@icloud.com", "1234",23, roleRepos.findById(2L).stream().toList()));
     }
 }

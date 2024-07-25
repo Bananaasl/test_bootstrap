@@ -23,6 +23,10 @@ public class User implements UserDetails {
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
+
+    private String surname;
+
+    private int age;
     @ManyToMany
     @JoinTable(
             name = "users_roles",
@@ -32,10 +36,12 @@ public class User implements UserDetails {
 
     public User() {}
 
-    public User(String username, String email, String password, List<Role> roles) {
+    public User(String username, String surname, String email, String password, int age, List<Role> roles) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.surname = surname;
+        this.age = age;
         this.roles = roles;
     }
 
@@ -80,10 +86,26 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .map(role -> new SimpleGrantedAuthority(role.getAuthority()))
                 .collect(Collectors.toList());
     }
 

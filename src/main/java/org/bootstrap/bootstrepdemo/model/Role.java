@@ -1,12 +1,14 @@
 package org.bootstrap.bootstrepdemo.model;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements GrantedAuthority {
 
 
     @Id
@@ -64,5 +66,10 @@ public class Role {
     @Override
     public String toString() {
         return "Role " + name;
+    }
+
+    @Override
+    public String getAuthority() {
+        return getName();
     }
 }
