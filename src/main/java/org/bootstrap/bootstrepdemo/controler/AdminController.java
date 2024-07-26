@@ -1,7 +1,6 @@
 package org.bootstrap.bootstrepdemo.controler;
 
 
-import org.bootstrap.bootstrepdemo.model.Role;
 import org.bootstrap.bootstrepdemo.model.User;
 import org.bootstrap.bootstrepdemo.repos.RoleRepos;
 import org.bootstrap.bootstrepdemo.service.UserService;
@@ -11,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
