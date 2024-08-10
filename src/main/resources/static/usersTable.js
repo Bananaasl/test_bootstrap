@@ -82,9 +82,10 @@ async function getRolesForSelect  () {
         op.value = item.id
         op.textContent = item.name
         rolesSelect.appendChild(op)
+        rolesSelect.addEventListener('change', function (){
+            resultRolesSelect = rolesSelect.value
+        })
     })
-
-
 }
 
 // Открывается кнопка создания
@@ -147,7 +148,6 @@ on(document, 'click', '.btnUpdate', e => {
 })
 
 // создание и обновление юзера
-
 form.addEventListener('submit', (e) => {
     e.preventDefault()
     if (option == 'create') {
@@ -160,7 +160,8 @@ form.addEventListener('submit', (e) => {
                 surname:surname.value,
                 age:age.value,
                 email:email.value,
-                roles:resultRolesSelect.value
+                password:password.value,
+                roles:rolesSelect.value
             })
         })
             .then(r => r.json())
@@ -179,6 +180,7 @@ form.addEventListener('submit', (e) => {
                 surname:surname.value,
                 age:age.value,
                 email:email.value,
+                password:password.value,
                 roles:rolesSelect.value
             })
         })
