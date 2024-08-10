@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void save(User user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        user.setRoles(user.getRoles());
         userRepos.save(user);
     }
 
@@ -44,6 +45,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void update(User user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        user.setRoles(user.getRoles());
         userRepos.save(user);
     }
 
