@@ -21,7 +21,6 @@ const age = document.getElementById('age')
 const email = document.getElementById('email')
 const password = document.getElementById('password')
 const rolesSelect = document.getElementById('rolesSelect')
-let resultRolesSelect = ''
 
 //Переменная для определения действия (добавить или обновить)
 let option = ''
@@ -82,9 +81,6 @@ async function getRolesForSelect  () {
         op.value = item.id
         op.textContent = item.name
         rolesSelect.appendChild(op)
-        rolesSelect.addEventListener('change', function (){
-            resultRolesSelect = rolesSelect.value
-        })
     })
 }
 
@@ -101,17 +97,12 @@ btnCreate.addEventListener('click', () =>{
 })
 
 const on = (element, event, selector, handler) => {
-    // console.log(element)
-    // console.log(event)
-    // console.log(selector)
-    // console.log(handler)
     element.addEventListener(event, e => {
         if(e.target.closest(selector)){
             handler(e)
         }
     })
 }
-
 
 // Удление юзера
 on(document, 'click', '.btnDelete', e => {
@@ -130,7 +121,6 @@ on(document, 'click', '.btnDelete', e => {
 //Открываетс кнопка обновления
 let idForm = 0
 on(document, 'click', '.btnUpdate', e => {
-    e.preventDefault()
     const up = e.target.parentNode.parentNode
     idForm = up.children[0].innerHTML
     const usernameForm = up.children[1].innerHTML
@@ -151,7 +141,6 @@ on(document, 'click', '.btnUpdate', e => {
 form.addEventListener('submit', (e) => {
     e.preventDefault()
     if (option == 'create') {
-        // console.log("CREATE")
         fetch(urlAdmin, {
             method:'POST',
             headers: {'Content-Type': 'application/json'},
@@ -161,18 +150,21 @@ form.addEventListener('submit', (e) => {
                 age:age.value,
                 email:email.value,
                 password:password.value,
-                roles:rolesSelect.value
+                roles: Array.from(document.getElementById("rolesSelect").selectedOptions)
+                    .map(option => ({ id: option.value, name: option.textContent} ))
             })
         })
             .then(r => r.json())
             .then(data => {
                 const newData = []
+                console.log(data)
                 newData.push(data)
+                console.log(newData)
                 showAdminTableResult(newData)
             })
     }
     if (option == 'update') {
-        fetch(urlAdmin + idForm, {
+        fetch(urlAdmin, {
             method:'PUT',
             headers: {'Content-Type': 'application/json'},
             body:JSON.stringify({
@@ -181,14 +173,18 @@ form.addEventListener('submit', (e) => {
                 age:age.value,
                 email:email.value,
                 password:password.value,
-                roles:rolesSelect.value
+                roles: Array.from(document.getElementById("rolesSelect").selectedOptions)
+                    .map(option => ({ id: option.value, name: option.textContent} ))
             })
         })
             .then(r => r.json())
             .then(data => {
+                console.log(data)
                 const newData = []
                 newData.push(data)
+                console.log(newData)
                 showAdminTableResult(newData)
             })
     }
+    modal.hide()
 })
