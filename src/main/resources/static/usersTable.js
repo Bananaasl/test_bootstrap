@@ -65,6 +65,12 @@ const showAdminTableResult = (users) => {
     adminTable.innerHTML = resAdminTable
 }
 
+// Метод для очистки таблицы
+const clearTable = () => {
+    resAdminTable = ''; // Сбрасываем переменную, чтобы избежать отображения старых данных
+    adminTable.innerHTML = ''; // Очищаем содержимое таблицы
+}
+
 //Получаем роли
 const getRole = (user) => {
     let userRoles = ''
@@ -109,6 +115,8 @@ on(document, 'click', '.btnDelete', e => {
     e.preventDefault()
     const dell = e.target.parentNode.parentNode
     const id = dell.firstElementChild.innerHTML
+    console.log(dell)
+    console.log(id)
     fetch(urlAdmin + id, {
         method: 'DELETE'
     })
@@ -140,51 +148,45 @@ on(document, 'click', '.btnUpdate', e => {
 // создание и обновление юзера
 form.addEventListener('submit', (e) => {
     e.preventDefault()
-    if (option == 'create') {
+
+    const requestData = {
+        username: username.value,
+        surname: surname.value,
+        age: age.value,
+        email: email.value,
+        password: password.value,
+        roles: Array.from(rolesSelect.selectedOptions)
+            .map(option => ({ id: option.value, name: option.textContent} ))
+    };
+
+    if (option === 'create') {
         fetch(urlAdmin, {
-            method:'POST',
-            headers: {'Content-Type': 'application/json'},
-            body:JSON.stringify({
-                username: username.value,
-                surname:surname.value,
-                age:age.value,
-                email:email.value,
-                password:password.value,
-                roles: Array.from(document.getElementById("rolesSelect").selectedOptions)
-                    .map(option => ({ id: option.value, name: option.textContent} ))
-            })
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestData)
         })
             .then(r => r.json())
             .then(data => {
-                const newData = []
-                console.log(data)
-                newData.push(data)
-                console.log(newData)
-                showAdminTableResult(newData)
-            })
-    }
-    if (option == 'update') {
+                clearTable(); // Очищаем таблицу
+                fetch(urlAdmin) // После создания юзера, заново получаем всех юзеров
+                    .then(r => r.json())
+                    .then(users => showAdminTableResult(users)) // Рисуем заново таблицу
+                    .catch(e => console.log(e));
+            });
+    } else if (option === 'update') {
         fetch(urlAdmin + idForm, {
-            method:'PUT',
-            headers: {'Content-Type': 'application/json'},
-            body:JSON.stringify({
-                username: username.value,
-                surname:surname.value,
-                age:age.value,
-                email:email.value,
-                password:password.value,
-                roles: Array.from(document.getElementById("rolesSelect").selectedOptions)
-                    .map(option => ({ id: option.value, name: option.textContent} ))
-            })
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestData)
         })
             .then(r => r.json())
             .then(data => {
-                console.log(data)
-                const newData = []
-                newData.push(data)
-                console.log(newData)
-                showAdminTableResult(newData)
-            })
+                clearTable(); // Очищаем таблицу
+                fetch(urlAdmin) // После обновления юзера, заново получаем всех юзеров
+                    .then(r => r.json())
+                    .then(users => showAdminTableResult(users)) // Рисуем заново таблицу
+                    .catch(e => console.log(e));
+            });
     }
     modal.hide()
 })
