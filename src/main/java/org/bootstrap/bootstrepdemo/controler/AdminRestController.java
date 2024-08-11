@@ -49,7 +49,7 @@ public class AdminRestController {
         return ResponseEntity.ok(userService.findAll());
     }
 
-    @PutMapping()
+    @PutMapping("{id}")
     public ResponseEntity<List<User>> updateUser(@RequestBody User user) {
         userService.update(user);
         return ResponseEntity.ok(userService.findAll());

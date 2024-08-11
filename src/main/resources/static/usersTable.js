@@ -164,7 +164,7 @@ form.addEventListener('submit', (e) => {
             })
     }
     if (option == 'update') {
-        fetch(urlAdmin, {
+        fetch(urlAdmin + idForm, {
             method:'PUT',
             headers: {'Content-Type': 'application/json'},
             body:JSON.stringify({
