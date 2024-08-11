@@ -49,8 +49,9 @@ public class AdminRestController {
         return ResponseEntity.ok(userService.findAll());
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<List<User>> updateUser(@RequestBody User user) {
+    @PutMapping("/{id}")
+    public ResponseEntity<List<User>> updateUser(@PathVariable Long id, @RequestBody User user) {
+        user.setId(id); // устанавливаем ID перед обновлением
         userService.update(user);
         return ResponseEntity.ok(userService.findAll());
     }
